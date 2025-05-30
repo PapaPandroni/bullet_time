@@ -1,27 +1,45 @@
 import pygame
 from constants import *
+from player import Player
 
 
-pygame.init()
-clock = pygame.time.Clock()
-
-
-
-running = True
-while running:
+class Game():
     
-    dt = clock.tick() / 1000
+    def __init__(self):
+        #setup
+        pygame.init()
+        self.running = True
+        self.clock = pygame.time.Clock()
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            runnig = False
+        #groups
+        self.ALL_SPRITES = pygame.sprite.Group()
+
+        #sprites
+        self.player=Player(PLAYER_IMAGE, self.ALL_SPRITES)
+
+    def run(self):
     
-    SCREEN.fill("black")
+        
 
-    #game
+        while self.running:
+            
+            dt = self.clock.tick() / 1000
 
-    pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+            
+            #update game
+            self.ALL_SPRITES.update(dt)
+            
+            #draw game
+            SCREEN.fill("black")
+            self.ALL_SPRITES.draw(SCREEN)
 
-pygame.quit()
+            pygame.display.update()
+            
+        pygame.quit()
 
-
+if __name__ == "__main__":
+    game = Game()
+    game.run()
