@@ -7,7 +7,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__(Groups)
         self.image = surf
         self.rect = self.image.get_frect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
-        self.hitbox_rect = self.rect.inflate(-50, 0)
+        self.hitbox_rect = self.rect.inflate(-60, 0)
         #movement
         self.direction = pygame.math.Vector2(0,0)
         self.speed = 500
@@ -24,11 +24,10 @@ class Player(pygame.sprite.Sprite):
     def move(self, dt):
         #update position
         self.hitbox_rect.x += self.direction.x * self.speed * dt
-        self.rect.center = self.hitbox_rect.center
         self.collision("horizontal")
         self.hitbox_rect.y += self.direction.y * self.speed * dt
-        self.rect.center = self.hitbox_rect.center
         self.collision("vertical")
+        self.rect.center = self.hitbox_rect.center
 
     def collision(self, direction):
         for sprite in self.collision_sprites:
@@ -40,12 +39,12 @@ class Player(pygame.sprite.Sprite):
                 else:
                     if self.direction.y > 0: self.hitbox_rect.bottom = sprite.rect.top
                     if self.direction.y < 0: self.hitbox_rect.top = sprite.rect.bottom
-                self.rect.center = self.hitbox_rect.center
+                
     
     def update(self, dt):
         self.input()
         self.move(dt)
 
         #keep player in bound
-        self.rect.clamp_ip(pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.pos = pygame.math.Vector2(self.rect.topleft)
+        #self.rect.clamp_ip(pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
+        #self.pos = pygame.math.Vector2(self.rect.topleft)
