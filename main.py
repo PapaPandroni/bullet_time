@@ -31,7 +31,10 @@ class Game():
                 Sprite((x*TILE_SIZE,y*TILE_SIZE), image, self.ALL_SPRITES)
             for obj in map.get_layer_by_name("Objects"):
                 CollisionSprites((obj.x, obj.y), obj.image, (self.ALL_SPRITES, self.COLLISION_SPRITES))
-
+            for obj in map.get_layer_by_name("Collisions"):
+                wall = pygame.Surface((obj.width, obj.height))
+                CollisionSprites((obj.x, obj.y), wall, self.COLLISION_SPRITES)
+            
 
     def run(self):
     
