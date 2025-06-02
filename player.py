@@ -3,10 +3,10 @@ import os
 from constants import *
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, surf, Groups, collision_sprites):
+    def __init__(self, surf, pos, Groups, collision_sprites):
         super().__init__(Groups)
         self.image = surf
-        self.rect = self.image.get_frect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+        self.rect = self.image.get_frect(center=pos)
         self.hitbox_rect = self.rect.inflate(-60, 0)
         #movement
         self.direction = pygame.math.Vector2(0,0)
