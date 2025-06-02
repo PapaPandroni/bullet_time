@@ -22,7 +22,6 @@ class Game():
 
         self.setup()
 
-        #sprites
         
         
 
