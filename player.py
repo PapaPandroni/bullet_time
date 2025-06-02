@@ -7,11 +7,13 @@ class Player(pygame.sprite.Sprite):
         super().__init__(Groups)
         self.image = surf
         self.rect = self.image.get_frect(center=pos)
-        self.hitbox_rect = self.rect.inflate(-60, -90)
+        self.hitbox_rect = self.rect.inflate(-60, -90) 
         #movement
         self.direction = pygame.math.Vector2(0,0)
         self.speed = 500
-        self.collision_sprites = collision_sprites
+
+        #pass all the collision sprites to be able to check for collissions
+        self.collision_sprites = collision_sprites 
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -19,6 +21,7 @@ class Player(pygame.sprite.Sprite):
         #find direction
         self.direction.x = int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
         self.direction.y = int(keys[pygame.K_DOWN]) - int(keys[pygame.K_UP])
+        #this is for not moving faster diagonally
         self.direction = self.direction.normalize() if self.direction else self.direction
     
     def move(self, dt):
