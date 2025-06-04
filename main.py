@@ -15,15 +15,35 @@ class Game(): #our basic game loop
         pygame.init()
         self.running = True
         self.clock = pygame.time.Clock()
+        self.load_images()
 
         #groups
         self.ALL_SPRITES = AllSprites()
         self.COLLISION_SPRITES = pygame.sprite.Group()
+        self.BULLET_SPRITES = pygame.sprite.Group()
 
         self.setup()
 
+       #gun_time
+        self.can_shoot = True
+        self.shoot_time = 0
+        self.gun_cd = 100
+
+    def load_images(self):
+        self.bullet_surf = pygame.image.load(os.path.join("assets", "images", "gun", "bullet.png")).convert_alpha()
         
-        
+    def input(self):
+        if pygame.mouse.get_pressed()[0] and self.can_shoot:
+            pos = self.gun.rect.center + self.gun.player_direction * 50
+            Bullet(self.bullet_surf, pos, self.gun.player_direction, (self.ALL_SPRITES, self.BULLET_SPRITES))
+            self.can_shoot = False
+            self.shoot_time = pygame.time.get_ticks()
+
+    def gun_timer(self):
+        if not self.can_shoot:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.shoot_time > self.gun_cd:
+                self.can_shoot = True
 
     def setup(self):
             map = load_pygame(os.path.join("assets", "data", "maps", "world.tmx")) #loading map
@@ -51,8 +71,12 @@ class Game(): #our basic game loop
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                
+                    
             
             #update game
+            self.gun_timer()
+            self.input()
             self.ALL_SPRITES.update(dt)
             
             #draw game

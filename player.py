@@ -34,8 +34,8 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         
         #find direction
-        self.direction.x = int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
-        self.direction.y = int(keys[pygame.K_DOWN]) - int(keys[pygame.K_UP])
+        self.direction.x = int(keys[pygame.K_d]) - int(keys[pygame.K_a])
+        self.direction.y = int(keys[pygame.K_s]) - int(keys[pygame.K_w])
         #this is for not moving faster diagonally
         self.direction = self.direction.normalize() if self.direction else self.direction
     
