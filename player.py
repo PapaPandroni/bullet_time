@@ -27,7 +27,7 @@ class Player(pygame.sprite.Sprite):
                     full_path = os.path.join(folder_path, file_name)
                     surf = pygame.image.load(full_path).convert_alpha()
                     self.frames[state].append(surf) #appends the surfs to the dictionary
-        print(self.frames)
+        
 
 
     def input(self):
