@@ -5,7 +5,7 @@ from sprites import *
 from groups import AllSprites
 
 from pytmx.util_pygame import load_pygame #for the tiled map file
-from random import randint
+from random import randint, choice
 
 
 class Game(): #our basic game loop
@@ -15,23 +15,44 @@ class Game(): #our basic game loop
         pygame.init()
         self.running = True
         self.clock = pygame.time.Clock()
-        self.load_images()
 
         #groups
         self.ALL_SPRITES = AllSprites()
         self.COLLISION_SPRITES = pygame.sprite.Group()
         self.BULLET_SPRITES = pygame.sprite.Group()
+        self.ENEMY_SPRITES = pygame.sprite.Group()
 
-        self.setup()
+        
 
        #gun_time
         self.can_shoot = True
         self.shoot_time = 0
         self.gun_cd = 100
 
+        #enemy timer
+        self.enemy_event = pygame.event.custom_type()
+        pygame.time.set_timer(self.enemy_event, 300)
+
+        self.spawn_positions = []
+
+        self.load_images()
+        self.setup()
+
     def load_images(self):
         self.bullet_surf = pygame.image.load(os.path.join("assets", "images", "gun", "bullet.png")).convert_alpha()
         
+        folders = list(os.walk(os.path.join("assets", "images", "enemies")))[0][1]
+        self.enemy_frames = {}
+        for folder in folders:
+            for folder_path, _, file_names in os.walk(os.path.join("assets", "images", "enemies", folder)):
+                self.enemy_frames[folder] = []
+                for file_name in sorted(file_names, key=lambda name: int(name.split(".")[0])):
+                    full_path = os.path.join(folder_path, file_name)
+                    print(full_path)
+                    surf = pygame.image.load(full_path).convert_alpha()
+                    self.enemy_frames[folder].append(surf)
+
+
     def input(self):
         if pygame.mouse.get_pressed()[0] and self.can_shoot:
             pos = self.gun.rect.center + self.gun.player_direction * 50
@@ -44,6 +65,9 @@ class Game(): #our basic game loop
             current_time = pygame.time.get_ticks()
             if current_time - self.shoot_time > self.gun_cd:
                 self.can_shoot = True
+
+    def enemy_timer(self):
+        pass
 
     def setup(self):
             map = load_pygame(os.path.join("assets", "data", "maps", "world.tmx")) #loading map
@@ -60,8 +84,9 @@ class Game(): #our basic game loop
                 if obj.name == "Player":
                     self.player=Player(PLAYER_IMAGE, (obj.x, obj.y), self.ALL_SPRITES, self.COLLISION_SPRITES)
                     self.gun = Gun(self.player, self.ALL_SPRITES)
-            
-
+                else: 
+                    self.spawn_positions.append((obj.x, obj.y))
+        
     def run(self):
 
         while self.running:
@@ -71,6 +96,9 @@ class Game(): #our basic game loop
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                if event.type == self.enemy_event:
+                    
+                    Enemy(choice(self.spawn_positions), choice(list(self.enemy_frames.values())), (self.ALL_SPRITES, self.ENEMY_SPRITES), self.player, self.COLLISION_SPRITES)
                 
                     
             
