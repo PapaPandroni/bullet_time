@@ -5,8 +5,7 @@ class AllSprites(pygame.sprite.Group):
         super().__init__()
         self.screen = SCREEN
         self.offset = pygame.Vector2()
-
-
+   
     #this is basically our camera. redrawing the world depending on where the player position is. 
     def draw(self, target_pos):
         self.offset.x = - (target_pos[0] - SCREEN_WIDTH / 2)

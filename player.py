@@ -16,8 +16,8 @@ class Player(pygame.sprite.Sprite):
 
         #pass all the collision sprites to be able to check for collissions
         self.collision_sprites = collision_sprites 
-        
 
+        
     def load_images(self):
         self.frames = {"left": [], "right": [], "up": [], "down": []} #dictionary for all images pathes
         #important that state keys == folder names
@@ -27,7 +27,6 @@ class Player(pygame.sprite.Sprite):
                     full_path = os.path.join(folder_path, file_name)
                     surf = pygame.image.load(full_path).convert_alpha()
                     self.frames[state].append(surf) #appends the surfs to the dictionary
-        
 
 
     def input(self):
